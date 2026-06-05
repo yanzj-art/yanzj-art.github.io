@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌾 粮食安全小卫士 - 可爱闯关</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "微软雅黑", "PingFang SC", sans-serif;
+        }
+
+        body {
+            background: linear-gradient(45deg, #ffefba, #ffffff, #ffd6e0);
+            background-size: 200% 200%;
+            animation: bgMove 8s infinite ease-in-out;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        /* 背景流动动画 */
+        @keyframes bgMove {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .game-box {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #fff;
+            border-radius: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            border: 4px solid #ffd970;
+            animation: boxBounce 1.2s ease;
+            position: relative;
+            z-index: 1;
+        }
+
+        @keyframes boxBounce {
+            0% { transform: translateY(-30px); opacity: 0; }
+            60% { transform: translateY(5px); }
+            100% { transform: translateY(0); opacity: 1; }
+        }
+
+        .game-head {
+            background: #ffb6c1;
+            text-align: center;
+            padding: 30px 20px;
+            color: #fff;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .game-head h1 {
+            font-size: 28px;
+            margin-bottom: 8px;
+            animation: textSlide 1s ease;
+        }
+
+        @keyframes textSlide {
+            from { transform: translateX(-30px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .game-main {
+            padding: 30px;
+        }
+
+        .start-page, .game-page, .end-page {
+            animation: fadeUp 0.7s ease forwards;
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .start-page h2 {
+            font-size: 26px;
+            color: #ff8fab;
+            margin-bottom: 20px;
+            animation: pulse 1.5s infinite ease-in-out;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+            100% { transform: scale(1); }
+        }
+
+        .info-card {
+            background: #fff9e6;
+            border-radius: 20px;
+            padding: 25px;
+            margin: 20px 0;
+            border: 3px dashed #ffd970;
+            transition: all 0.3s;
+        }
+
+        .info-card:hover {
+            transform: scale(1.02);
+            box-shadow: 0 5px 15px rgba(255, 217, 112, 0.2);
+        }
+
+        .info-card h3 {
+            color: #ff8ab1;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+
+        .btn {
+            background: #ff8fab;
+            color: #fff;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(255, 143, 171, 0.3);
+        }
+
+        .btn:hover {
+            transform: scale(1.1);
+            background: #ff6b9d;
+            box-shadow: 0 8px 20px rgba(255, 107, 157, 0.4);
+        }
+
+        .btn:active {
+            transform: scale(0.95);
+        }
+
+        .title {
+            font-size: 22px;
+            color: #ff8fab;
+            margin: 15px 0;
+            font-weight: bold;
+        }
+
+        .scene {
+            background: #fef8ff;
+            border-radius: 20px;
+            padding: 22px;
+            border: 2px solid #ffd0f2;
+            font-size: 16px;
+            margin-bottom: 25px;
+        }
+
+        .opt {
+            background: #e7f9ff;
+            border: 2px solid #87dfff;
+            border-radius: 18px;
+            padding: 18px;
+            margin: 10px 0;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 16px;
+        }
+
+        .opt:hover {
+            transform: scale(1.05);
+            background: #d0f2ff;
+            border-color: #5ccbff;
+        }
+
+        .opt:active {
+            transform: scale(0.98);
+        }
+
+        .tip {
+            padding: 18px;
+            border-radius: 18px;
+            margin: 20px 0;
+            display: none;
+            font-weight: bold;
+            animation: popBounce 0.4s ease forwards;
+        }
+
+        @keyframes popBounce {
+            0% { transform: scale(0.7); opacity: 0; }
+            60% { transform: scale(1.1); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .right {
+            background: #e6ffe6;
+            color: #2e7d32;
+            border: 2px solid #81c784;
+        }
+
+        .wrong {
+            background: #ffe6e6;
+            color: #c62828;
+            border: 2px solid #e57373;
+        }
+
+        .score-txt {
+            font-size: 36px;
+            color: #ff6b9d;
+            font-weight: bold;
+            margin: 20px 0;
+            animation: scoreJump 1s ease;
+        }
+
+        @keyframes scoreJump {
+            0% { transform: scale(0.5); opacity: 0; }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        .level-txt {
+            font-size: 22px;
+            color: #555;
+            margin-bottom: 25px;
+        }
+
+        .progress {
+            width: 100%;
+            height: 15px;
+            background: #f0f0f0;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .progress-line {
+            height: 100%;
+            background: linear-gradient(90deg, #87dfff, #82ca9d);
+            width: 0%;
+            border-radius: 10px;
+            transition: 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* ---------- 爱心 + 烟花特效 ---------- */
+        .effect {
+            position: fixed;
+            z-index: 9999;
+            pointer-events: none;
+        }
+
+        .heart {
+            width: 20px;
+            height: 20px;
+            background-color: #ff5e94;
+            transform: rotate(45deg);
+            animation: heartAnim 1s ease forwards;
+        }
+
+        .heart::before, .heart::after {
+            content: '';
+            width: 20px;
+            height: 20px;
+            background-color: #ff5e94;
+            border-radius: 50%;
+            position: absolute;
+        }
+
+        .heart::before { left: -10px; top: 0; }
+        .heart::after { left: 0; top: -10px; }
+
+        @keyframes heartAnim {
+            0% { transform: rotate(45deg) scale(0); opacity: 1; }
+            100% { transform: rotate(45deg) scale(1.5) translateY(-50px); opacity: 0; }
+        }
+
+        .firework {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            animation: fireworkAnim 1.2s ease forwards;
+        }
+
+        @keyframes fireworkAnim {
+            0% { transform: scale(0); opacity: 1; }
+            100% { transform: scale(1.2) translate(var(--x), var(--y)); opacity: 0; }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="game-box">
+        <div class="game-head">
+            <h1>🌾 粮食安全小卫士 可爱闯关</h1>
+            <p>珍惜粮食 · 守护国家安全 · 从我做起</p>
+        </div>
+
+        <div class="game-main">
+            <div class="start-page" id="startPage">
+                <h2>🐣 欢迎来到粮食安全小课堂</h2>
+                <div class="info-card">
+                    <h3>📕 粮食安全小知识</h3>
+                    <p>🥰 粮食安全是国家安全的重要组成部分</p>
+                    <p>🥰 我们要把饭碗牢牢端在自己手中</p>
+                    <p>🥰 节约粮食，反对浪费，人人有责</p>
+                    <p>🥰 珍惜劳动成果，守护大国粮仓</p>
+                </div>
+                <div class="info-card">
+                    <h3>🎮 游戏规则</h3>
+                    <p>✨ 一共10关，边玩边学知识</p>
+                    <p>✨ 答对得分，答错也能学习</p>
+                    <p>✨ 满分100分，获得可爱称号</p>
+                </div>
+                <button class="btn" onclick="startGame()">🎮 开始游戏</button>
+            </div>
+
+            <div class="game-page" id="gamePage" style="display:none;">
+                <div class="progress"><div class="progress-line" id="progressLine"></div></div>
+                <div class="title" id="levelTitle">第1关</div>
+                <div class="scene" id="sceneText">题目加载中...</div>
+                <div id="optBox"></div>
+                <div class="tip" id="tipBox"></div>
+                <button class="btn" id="nextBtn" style="display:none;" onclick="nextLevel()">➡️ 下一关</button>
+            </div>
+
+            <div class="end-page" id="endPage" style="display:none;">
+                <h2>🎉 恭喜你通关啦！</h2>
+                <div class="score-txt" id="scoreResult">总分：0分</div>
+                <div class="level-txt" id="levelTag">你的称号：</div>
+                <div class="info-card">
+                    <h3>🌱 粮食安全守护公约</h3>
+                    <p>✅ 光盘行动，不浪费一粒粮食</p>
+                    <p>✅ 按需点餐，理性消费</p>
+                    <p>✅ 珍惜劳动，尊重农民</p>
+                    <p>✅ 争做粮食安全小卫士</p>
+                </div>
+                <button class="btn" onclick="restartGame()">🔄 再来一局</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const levels = [
+            {title:"餐厅点餐",desc:"和同学外出就餐点餐时，正确的做法是？",opts:[
+                {t:"多点菜显得大方，吃不完没关系",r:false,tip:"不对哦～浪费粮食是不对的！"},
+                {t:"按需点餐，吃多少点多少",r:true,tip:"太棒啦！你真是节约小能手！"},
+                {t:"剩下的饭菜没必要打包",r:false,tip:"错啦～剩饭打包是美德哦！"}
+            ]},
+            {title:"粮食安全地位",desc:"粮食安全是国家安全的重要基础。",opts:[
+                {t:"正确 ✅",r:true,tip:"正确！粮食安全超级重要！"},
+                {t:"错误 ❌",r:false,tip:"不对哦！粮食安全是国家头等大事！"}
+            ]},
+            {title:"校园食堂",desc:"在学校食堂打饭时，你会怎么做？",opts:[
+                {t:"按需取餐，光盘行动",r:true,tip:"优秀！为你点赞！"},
+                {t:"多打饭，吃不完倒掉",r:false,tip:"不可以哦！不能浪费粮食！"},
+                {t:"不喜欢就直接扔掉",r:false,tip:"不对呀！粮食来之不易～"}
+            ]},
+            {title:"节约粮食",desc:"厉行节约、反对浪费是我们的责任。",opts:[
+                {t:"正确 ✅",r:true,tip:"太对啦！节约最光荣！"},
+                {t:"错误 ❌",r:false,tip:"错啦！节约粮食人人有责！"}
+            ]},
+            {title:"粮食安全意义",desc:"保障粮食安全是为了？",opts:[
+                {t:"国家发展、人民幸福",r:true,tip:"正确！粮食安全守护大家！"},
+                {t:"可以随意浪费",r:false,tip:"不可以！粮食绝对不能浪费！"},
+                {t:"和国家安全无关",r:false,tip:"错啦！粮食安全就是国家安全！"}
+            ]},
+            {title:"家庭用餐",desc:"在家做饭，怎样最节约？",opts:[
+                {t:"按需做饭，减少剩饭",r:true,tip:"正确！你太会节约啦！"},
+                {t:"每次做很多，吃不完扔掉",r:false,tip:"不对哦！这样太浪费啦！"},
+                {t:"剩饭直接倒掉",r:false,tip:"不可以！要合理利用剩饭～"}
+            ]},
+            {title:"粮食生产",desc:"粮食生产很辛苦，我们要珍惜。",opts:[
+                {t:"正确 ✅",r:true,tip:"太对啦！一粥一饭当思来处不易！"},
+                {t:"错误 ❌",r:false,tip:"错啦！农民伯伯很辛苦的！"}
+            ]},
+            {title:"浪费监督",desc:"看到别人浪费粮食，你应该？",opts:[
+                {t:"及时提醒，节约光荣",r:true,tip:"真棒！你是合格的小卫士！"},
+                {t:"视而不见",r:false,tip:"不对哦！要勇敢提醒节约粮食！"},
+                {t:"跟着一起浪费",r:false,tip:"不可以！浪费是不对的行为！"}
+            ]},
+            {title:"国家安全体系",desc:"粮食安全属于国家安全教育重要内容。",opts:[
+                {t:"正确 ✅",r:true,tip:"正确！你学得非常棒！"},
+                {t:"错误 ❌",r:false,tip:"错啦！粮食安全是重点学习内容！"}
+            ]},
+            {title:"守护粮食安全",desc:"作为青少年，我们应该？",opts:[
+                {t:"浪费粮食，追求享受",r:false,tip:"不对哦！这种行为要改正！"},
+                {t:"节约粮食、践行光盘、宣传知识",r:true,tip:"超级棒！你是金牌小卫士！"}
+            ]}
+        ];
+
+        let nowLevel = 0;
+        let score = 0;
+        const total = levels.length;
+
+        const startPage = document.getElementById("startPage");
+        const gamePage = document.getElementById("gamePage");
+        const endPage = document.getElementById("endPage");
+        const levelTitle = document.getElementById("levelTitle");
+        const sceneText = document.getElementById("sceneText");
+        const optBox = document.getElementById("optBox");
+        const tipBox = document.getElementById("tipBox");
+        const nextBtn = document.getElementById("nextBtn");
+        const progressLine = document.getElementById("progressLine");
+        const scoreResult = document.getElementById("scoreResult");
+        const levelTag = document.getElementById("levelTag");
+
+        // ---------- 爱心特效 ----------
+        function createHeart(x, y) {
+            for (let i = 0; i < 8; i++) {
+                const h = document.createElement("div");
+                h.className = "effect heart";
+                h.style.left = x + "px";
+                h.style.top = y + "px";
+                h.style.transform = `rotate(45deg) translate(${Math.random()*60-30}px, ${Math.random()*60-30}px)`;
+                document.body.appendChild(h);
+                setTimeout(() => h.remove(), 1000);
+            }
+        }
+
+        // ---------- 彩色烟花特效 ----------
+        function createFirework(x, y) {
+            const colors = ["#ff5e94","#ff9f43","#34ace0","#33d9b2","#ff5252","#ffcb45"];
+            for (let i = 0; i < 30; i++) {
+                const f = document.createElement("div");
+                f.className = "effect firework";
+                f.style.backgroundColor = colors[Math.floor(Math.random()*colors.length)];
+                f.style.left = x + "px";
+                f.style.top = y + "px";
+                f.style.setProperty("--x", (Math.random()*100-50)+"px");
+                f.style.setProperty("--y", (Math.random()*100-50)+"px");
+                document.body.appendChild(f);
+                setTimeout(() => f.remove(), 1200);
+            }
+        }
+
+        function startGame() {
+            nowLevel = 0;
+            score = 0;
+            startPage.style.display = "none";
+            gamePage.style.display = "block";
+            loadLevel();
+        }
+
+        function loadLevel() {
+            const data = levels[nowLevel];
+            levelTitle.innerText = `第${nowLevel+1}关：${data.title}`;
+            sceneText.innerText = data.desc;
+            optBox.innerHTML = "";
+            tipBox.style.display = "none";
+            nextBtn.style.display = "none";
+            progressLine.style.width = (nowLevel / total) * 100 + "%";
+
+            data.opts.forEach(item => {
+                const div = document.createElement("div");
+                div.className = "opt";
+                div.innerText = item.t;
+                div.onclick = (e) => check(item, e.clientX, e.clientY);
+                optBox.appendChild(div);
+            });
+        }
+
+        function check(item, x, y) {
+            document.querySelectorAll(".opt").forEach(o => o.style.pointerEvents = "none");
+            
+            if (item.r) {
+                score += 10;
+                tipBox.className = "tip right";
+                tipBox.innerHTML = `<strong>✅ 回答正确！</strong><br>${item.tip}`;
+                createHeart(x, y);
+                createFirework(x, y);
+            } else {
+                tipBox.className = "tip wrong";
+                tipBox.innerHTML = `<strong>❌ 回答错误</strong><br>${item.tip}`;
+            }
+            tipBox.style.display = "block";
+            nextBtn.style.display = "inline-block";
+        }
+
+        function nextLevel() {
+            nowLevel++;
+            nowLevel >= total ? showEnd() : loadLevel();
+        }
+
+        function showEnd() {
+            gamePage.style.display = "none";
+            endPage.style.display = "block";
+            scoreResult.innerText = `总分：${score} 分`;
+            let tag = score >= 90 ? "🏅 金牌粮食安全小卫士" :
+                     score >= 70 ? "✅ 优秀国家安全宣传员" :
+                     "🌱 继续加油，你最棒！";
+            levelTag.innerText = tag;
+        }
+
+        function restartGame() {
+            endPage.style.display = "none";
+            startPage.style.display = "block";
+        }
+    </script>
+</body>
+</html>
